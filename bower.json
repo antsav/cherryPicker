@@ -1,0 +1,20 @@
+{
+  "name": "cherryPicker",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/antsav/cherryPicker",
+  "authors": [
+    "Anton S"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
