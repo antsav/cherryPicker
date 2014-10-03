@@ -1,14 +1,11 @@
-//cherry 
-
 // vendor libs - core
 var async =             require('async');
 var fs =                require('fs');
 var UglifyJS =          require('uglify-js');
 
-// vendor libs - redundant
-var colors =            require('colors');
-var AsciiTable =        require('ascii-table')
 
+// local libs
+var printer =           require('./core/printer');
 
 var projectGraph = [
     {
@@ -118,31 +115,10 @@ fs.readFile(libraryFile, 'utf8', function read(err, fileContent) {
     ast.body = cherryBody;
     var cherryAst = ast.transform(compressor).print_to_string();
 
-    if (!fs.existsSync(__dirname + "/public/js/build")) {
-        fs.mkdir(__dirname + "/public/js/build");
-        console.info("build directory created");
-    } else {
-        console.info("overwriting files in build");
-    }
+    printer.fileWriter(cherryAst);
 
 
-    var wstream = fs.createWriteStream(__dirname + '/public/js/build/lib.js');
-    wstream.write(cherryAst, 'utf8');
-    console.log("The library compiled!".green);
-    console.log(
-        "File size dropped from: " + colors.red(fileContent.length) +
-            " to: " + colors.green(cherryAst.length) + " symbols"
-    );
-    var percent = 100 - (cherryAst.length * 100) / fileContent.length;
-    var barSaved = Array(percent.toFixed(0) - 1).join("\u2588");
-    var barUsed  = Array((100 - percent.toFixed(0)) - 1).join("\u2588");
-    console.log(
-        (percent.toFixed(2) + '%').red + " " +
-        (barSaved).red +
-        (barUsed).green + ' ' +
-        ((100 - percent).toFixed(2) + '%').green
-    );
-    wstream.end();
+
 });
 
 
