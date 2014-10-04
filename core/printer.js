@@ -22,12 +22,14 @@ var logTable = function (obj) {
         {
             name:       'a',
             type:       'fnc',
+            hash:       'fabbd539dd5622df0eb517e094fe167336590df0',
             parents:    '0,1,2',
             test:       'ok'
         },
         {
             name:       'b',
             type:       'var',
+            hash:       '5314a1c127ad7998953aeaf8134651362b85146f',
             parents:    '1',
             test:       'NA'
         }
@@ -35,15 +37,16 @@ var logTable = function (obj) {
 
 
     var table = new AsciiTable('Graph');
-    table.setHeading('', 'name', 'type', 'parents', 'test');
+    table.setHeading('', 'name', 'type', 'hash', 'parents', 'test');
     object.forEach(function (row, index) {
         table.addRow(
             index,
             row.name,
             row.type,
+            row.hash,
             row.parents,
             row.test
-        )
+        );
     });
 
 
