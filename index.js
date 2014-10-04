@@ -14,21 +14,23 @@ var projectGraph = [
         tested:     false
     }
 ];
-var projectFile = __dirname + '/public/js/demoFile1.js';
-var libraryFile = __dirname + '/public/js/lib/demoLib1.js';
 
-var libraryFiles = ['/public/js/lib/demoLib1.js'];
 
+var projectFiles = ['./public/js/demoFile1.js'];
+var libraryFiles = ['./public/js/lib/demoLib1.js'];
 
 // adding root path to all files
-for (var i = 0 ; i < libraryFiles.length; i += 1) {
-    libraryFiles[i] = __dirname + libraryFiles[i];
-}
+//for (var i = 0 ; i < libraryFiles.length; i += 1) {
+//    libraryFiles[i] = __dirname + libraryFiles[i];
+//}
 
 
 
 
-////--------------------------ASYNC---------------------start
+//--------------------------ASYNC PARALLEL---------------------start
+
+
+
 //functions array generator
 var libraryFilesFnArr = [];
 //for (var i = 0; i < libraryFiles.length; i += 1) {
@@ -42,31 +44,39 @@ var libraryFilesFnArr = [];
 //    }
 //} //for
 
-for (var i = 0; i < libraryFiles.length; i += 1) {
-
-    libraryFilesFnArr[i] = function (callback) {
-        fs.readFile(libraryFiles[0],
-            'utf8', function (err, result) {
-                var ast = UglifyJS.parse(result);
-                return callback(null, ast);
-            });
-    }
-} //for
-
+//for (var i = 0; i < libraryFiles.length; i += 1) {
+//
+//    libraryFilesFnArr[i] = function (callback) {
+//        fs.readFile(libraryFiles[0],
+//            'utf8', function (err, result) {
+//                var ast = UglifyJS.parse(result);
+//                return callback(null, ast);
+//            });
+//    }
+//} //for
 
 
 async.parallel(
 [
+    // library file
     function (callback) {
         fs.readFile(libraryFiles[0],
             'utf8', function (err, result) {
                 var ast = UglifyJS.parse(result);
                 return callback(null, ast);
             });
+    },
+
+    // project file
+    function (callback) {
+        fs.readFile(projectFiles[0],
+            'utf8', function (err, result) {
+                var ast = UglifyJS.parse(result);
+                return callback(null, ast);
+            });
     }
 
-]
-    ,
+],
     //final callback
     function(err, result) {
     var fileOneOut = result[0].print_to_string();
@@ -74,9 +84,9 @@ async.parallel(
 
     //cherryPicking
     result[0].body.forEach(function (libFn, libIdx) {
-        projectGraph.forEach(function (projFn) {
-            if (libFn.name.name === projFn.name) {
-                console.log(libFn.name.name, projFn.name);
+        result[1].body.forEach(function (projFn) {
+//            console.log(libFn.name.name, projFn.body.expression.name);
+            if (libFn.name.name === projFn.body.expression.name) {
                 cherryBody.push(result[0].body[libIdx]);
             }
         });
@@ -91,15 +101,18 @@ async.parallel(
         Buffer.byteLength(fileOneOut, 'utf8'),
         Buffer.byteLength(cherryAst, 'utf8')
     );
+    printer.logTable()
 });
 
-//--------------------------ASYNC---------------------stop
+//--------------------------ASYNC PARALLEL---------------------stop
 
 
 
 
 
 //------------------------OLD APPROACH----------------start
+//var projectFile = __dirname + '/public/js/demoFile1.js';
+//var libraryFile = __dirname + '/public/js/lib/demoLib1.js';
 //
 //fs.readFile(libraryFile, 'utf8', function read(err, fileContent) {
 //    if (err) { throw err; }

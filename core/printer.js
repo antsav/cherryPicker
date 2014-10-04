@@ -18,12 +18,12 @@ var fileWriter = function (cherryAst) {
 }; //fileWiter
 
 var logTable = function (obj) {
-    var table = new AsciiTable('A Title');
+    var table = new AsciiTable('Graph');
     table
-        .setHeading('', 'Name', 'Age')
-        .addRow(1, 'Bob', 52)
-        .addRow(2, 'John', 34)
-        .addRow(3, 'Jim', 83)
+    .setHeading('', 'name', 'type', 'parents', 'test')
+        .addRow(0,  'a',    'var',  '0,1,2',   'ok')
+        .addRow(1,  'b',    'fnc',  '0',       'ok')
+        .addRow(2,  'c',    'var',  '1',       'NA')
 
     console.log(table.toString());
 }
@@ -44,10 +44,9 @@ var logFinal = function (orBytes, comBytes) {
             (barUsed).green + ' ' +
             ((100 - percent).toFixed() + '%').green
     );
-    logTable();
 }; //logger
 
 
 module.exports.fileWriter =     fileWriter;
-module.exports.logFinal =       logTable;
+module.exports.logTable =       logTable;
 module.exports.logFinal =       logFinal;
