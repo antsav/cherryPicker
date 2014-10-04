@@ -18,12 +18,34 @@ var fileWriter = function (cherryAst) {
 }; //fileWiter
 
 var logTable = function (obj) {
+    var object = obj || [
+        {
+            name:       'a',
+            type:       'fnc',
+            parents:    '0,1,2',
+            test:       'ok'
+        },
+        {
+            name:       'b',
+            type:       'var',
+            parents:    '1',
+            test:       'NA'
+        }
+    ];
+
+
     var table = new AsciiTable('Graph');
-    table
-    .setHeading('', 'name', 'type', 'parents', 'test')
-        .addRow(0,  'a',    'var',  '0,1,2',   'ok')
-        .addRow(1,  'b',    'fnc',  '0',       'ok')
-        .addRow(2,  'c',    'var',  '1',       'NA')
+    table.setHeading('', 'name', 'type', 'parents', 'test');
+    object.forEach(function (row, index) {
+        table.addRow(
+            index,
+            row.name,
+            row.type,
+            row.parents,
+            row.test
+        )
+    });
+
 
     console.log(table.toString());
 }
