@@ -71,7 +71,6 @@ async.parallel(
     function(err, result) {
     var fileOneOut = result[0].print_to_string();
     var cherryBody = [];
-    console.log("---->" + result[0].body);
 
     //cherryPicking
     result[0].body.forEach(function (libFn, libIdx) {
